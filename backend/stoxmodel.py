@@ -37,9 +37,7 @@ def predict_stock(symbol):
         prediction = scaler.inverse_transform(prediction_scaled)
         
         # Get the last 30 actual values for comparison
-        # Convert Series to list using values.tolist()
         actual_prices = df['Close'].values.tolist()[-30:]
-        # Convert datetime to string format
         dates = df['Date'].dt.strftime('%Y-%m-%d').values.tolist()[-30:]
         
         return jsonify({
@@ -52,7 +50,9 @@ def predict_stock(symbol):
         })
         
     except Exception as e:
+        print(f"Error processing request: {e}")  # Server-side debugging
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Run the server on all network interfaces
+    app.run(host='0.0.0.0', debug=True, port=5000)
